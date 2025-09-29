@@ -1,82 +1,78 @@
-const routes = {
-  home: {
-    title: 'Main Menu',
-    render: () => {
-      return `
-        <section class="menu">
-          <div class="card">
-            <h2>Welcome to Clarinet App</h2>
-            <p>This is a minimal static single-file app scaffold. Use the buttons above to navigate between the main menu and three other menus.</p>
-          </div>
-          <div class="card">
-            <h3>Quick Actions</h3>
-            <button id="demo-btn">Run Demo Action</button>
-            <div id="demo-out" style="margin-top:8px;color:var(--muted)"></div>
-          </div>
-        </section>
-      `;
+﻿document.addEventListener("DOMContentLoaded",()=>{ 
+  const routes = {
+    home: {
+      title:"Main Menu - THE Clarinet App",
+      content: `<h2>Welcome</h2>
+                <p>Pick a menu to explore tools and demos for practicing the clarinet.</p>
+                <button class="action ripple" id="demoBtn">Run Demo Action</button>
+                <div id="demoOutput" style="margin-top:12px;color:var(--muted)"></div>`
+    },
+    menu1: {
+      title:"Menu 1 - THE Clarinet App",
+      content:`<h2>Menu 1</h2><p>Content and tools for Menu 1.</p>`
+    },
+    menu2: {
+      title:"Menu 2 - THE Clarinet App",
+      content:`<h2>Menu 2</h2><p>Content and tools for Menu 2.</p>`
+    },
+    menu3: {
+      title:"Menu 3 - THE Clarinet App",
+      content:`<h2>Menu 3</h2><p>Content and tools for Menu 3.</p>`
     }
-  },
-  menu1: {
-    title: 'Menu 1',
-    render: () => `
-      <section class="menu">
-        <div class="card">
-          <h2>Menu 1 - Exercises</h2>
-          <p>Placeholder content for menu 1. Replace with real features like scales, exercises or lessons.</p>
-        </div>
-      </section>
-    `
-  },
-  menu2: {
-    title: 'Menu 2',
-    render: () => `
-      <section class="menu">
-        <div class="card">
-          <h2>Menu 2 - Sheet Music</h2>
-          <p>Placeholder for sheet music viewer and playback controls.</p>
-        </div>
-      </section>
-    `
-  },
-  menu3: {
-    title: 'Menu 3',
-    render: () => `
-      <section class="menu">
-        <div class="card">
-          <h2>Menu 3 - Settings</h2>
-          <p>App settings, preferences and profile info can go here.</p>
-        </div>
-      </section>
-    `
+  };
+
+  const contentEl = document.getElementById("main-content");
+  const navButtons = Array.from(document.querySelectorAll("#main-nav .nav-btn"));
+
+  function setActive(route){
+    navButtons.forEach(b=>b.classList.toggle("active", b.dataset.route===route));
+    const r = routes[route] || routes.home;
+    document.title = r.title;
+    contentEl.classList.remove("show");
+    setTimeout(()=>{
+      contentEl.innerHTML = r.content;
+      contentEl.classList.add("show");
+      attachDemo();
+      attachRipples();
+    }, 140);
   }
-};
 
-function setActiveButton(route){
-  document.querySelectorAll('.nav-btn').forEach(b=>{
-    b.classList.toggle('active', b.dataset.route===route);
+  navButtons.forEach(btn=>{
+    btn.addEventListener("click", ()=> setActive(btn.dataset.route));
   });
-}
 
-function navigate(route){
-  const r = routes[route] || routes.home;
-  document.title = `${r.title} - Clarinet App`;
-  document.getElementById('main-content').innerHTML = r.render();
-  setActiveButton(route);
-  // attach simple demo action if on home
-  const demoBtn = document.getElementById('demo-btn');
-  if(demoBtn){
-    demoBtn.addEventListener('click', ()=>{
-      const out = document.getElementById('demo-out');
-      out.textContent = 'Demo action ran at ' + new Date().toLocaleTimeString();
+  setActive("home");
+
+  function attachDemo(){
+    const demo = document.getElementById("demoBtn");
+    if(!demo) return;
+    demo.addEventListener("click", ()=>{
+      const out = document.getElementById("demoOutput");
+      const now = new Date().toLocaleTimeString();
+      out.textContent = `Demo ran at ${now}`;
+      out.style.opacity = 1;
+      out.style.transition = "opacity .28s";
     });
   }
-}
 
-// wire nav buttons
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.querySelectorAll('.nav-btn').forEach(b=>{
-    b.addEventListener('click', ()=>navigate(b.dataset.route));
-  });
-  navigate('home');
+  function attachRipples(){
+    const ripplers = document.querySelectorAll(".ripple");
+    ripplers.forEach(el=>{
+      if(el.dataset.rippleBound) return;
+      el.dataset.rippleBound = "1";
+      el.addEventListener("pointerdown", (e)=>{
+        const rect = el.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 1.6;
+        const span = document.createElement("span");
+        span.className = "ripple-effect";
+        span.style.width = span.style.height = `${size}px`;
+        span.style.left = `${e.clientX - rect.left - size/2}px`;
+        span.style.top = `${e.clientY - rect.top - size/2}px`;
+        el.appendChild(span);
+        span.addEventListener("animationend", ()=> span.remove());
+      });
+    });
+  }
+
+  attachRipples();
 });

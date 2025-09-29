@@ -1,29 +1,35 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Clarinet App</title>
+  <title>THE Clarinet App</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="app" class="container">
-    <header>
-      <h1>Clarinet App</h1>
-      <nav id="main-nav">
-        <button data-route="home" class="nav-btn active">Main Menu</button>
-        <button data-route="menu1" class="nav-btn">Menu 1</button>
-        <button data-route="menu2" class="nav-btn">Menu 2</button>
-        <button data-route="menu3" class="nav-btn">Menu 3</button>
+  <div id="app" class="app">
+    <header class="site-header">
+      <div class="brand">
+        <h1 class="logo"><span class="the">THE</span> Clarinet App</h1>
+        <p class="tagline">Practice smarter. Play better.</p>
+      </div>
+
+      <nav id="main-nav" class="nav">
+        <button data-route="home" class="nav-btn active ripple">Main Menu</button>
+        <button data-route="menu1" class="nav-btn ripple">Menu 1</button>
+        <button data-route="menu2" class="nav-btn ripple">Menu 2</button>
+        <button data-route="menu3" class="nav-btn ripple">Menu 3</button>
       </nav>
     </header>
 
-    <main id="main-content">
+    <main id="main-content" class="content card">
       <!-- content injected by JS -->
     </main>
 
-    <footer>
-      <small>Built for clarinet_app • Minimal static SPA</small>
+    <footer class="site-footer">
+      <small>Built for clarinet_app • Futuristic theme</small>
     </footer>
   </div>
 
